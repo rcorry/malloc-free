@@ -79,7 +79,7 @@ void my_free(header_t *allocated){
         size_t size = allocated->size;
         node_t *tmp_next = (void*)allocated;
         allocated = NULL;
-        tmp_next->size = size + 2*sizeof(header_t) + cur->next->size;
+        tmp_next->size = size + sizeof(header_t) + cur->next->size;
         tmp_next->next = cur->next->next;
         cur->next = tmp_next;
         return;
@@ -151,7 +151,9 @@ void test_2(){
     header_t *b = my_malloc(8);
     header_t *c = my_malloc(8);
     header_t *d = my_malloc(8);
-    printf("\nFree list after allocating 4 blocks of size 8\n"); 
+    header_t *e = my_malloc(8);
+
+    printf("\nFree list after allocating 5 blocks of size 8\n"); 
     print_free_list();
 
 
@@ -165,6 +167,10 @@ void test_2(){
     print_free_list();
 
     my_free(d);
+    printf("\nFree list after freeing up an allocated block to the left of a free block\n"); 
+    print_free_list();
+
+    my_free(e);
     printf("\nFree list after freeing up the last allocated block of size 8, leaving 1 entry on the free list\n"); 
     print_free_list();
 }
